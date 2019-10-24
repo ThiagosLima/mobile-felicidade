@@ -1,5 +1,6 @@
-FROM node:12.10.0-alpine
+FROM node:12.13.0-alpine
 WORKDIR /app
+RUN apk --no-cache add --virtual builds-deps build-base python
 RUN apk add --no-cache bash
 RUN npm install -g expo-cli
 COPY package*.json ./
