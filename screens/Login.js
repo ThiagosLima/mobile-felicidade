@@ -1,11 +1,27 @@
 //Login.js
 import React from 'react'
-import { StyleSheet, View, Button, TextInput } from 'react-native'
+import { 
+  StyleSheet, 
+  View, 
+  Button, 
+  TextInput, 
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback 
+} from 'react-native'
+
 //import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorage from 'AsyncStorage'
 
+// import { LinearGradient } from 'expo-linear-gradient';
+
 
 const axios = require('axios')
+
+
+// LoginScreen.navigationOptions = {
+//   headerTitle: 'none'
+// };
 
 export default class Login extends React.Component {
   state = {
@@ -52,28 +68,42 @@ export default class Login extends React.Component {
     const { email, password } = this.state
 
     return (
-      <View style={styles.container}>
-        <View style={{ margin: 10 }}>
-          <TextInput
-            name='email'
-            value={email}
-            placeholder='Enter email'
-            autoCapitalize='none'
-            onChangeText={this.handleEmailChange}
-          />
-        </View>
-        <View style={{ margin: 10 }}>
-          <TextInput
-            name='password'
-            value={password}
-            placeholder='Enter password'
-            secureTextEntry
-            onChangeText={this.handlePasswordChange}
-          />
-        </View>
-        <Button title='Login' onPress={this.onLogin} />
-        <Button title='Go to Signup' onPress={this.goToSignup} />
-      </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+         <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={50}
+      style={styles.container}
+      >
+        
+          <View>
+            <View style={{ margin: 10 }}>
+              <TextInput
+                name='email'
+                value={email}
+                placeholder='Enter email'
+                autoCapitalize='none'
+                onChangeText={this.handleEmailChange}
+              />
+            </View>
+            <View style={{ margin: 10 }}>
+              <TextInput
+                name='password'
+                value={password}
+                placeholder='Enter password'
+                secureTextEntry
+                onChangeText={this.handlePasswordChange}
+              />
+            </View>
+            <Button title='Login' onPress={this.onLogin} />
+            <Button title='Go to Signup' onPress={this.goToSignup} />
+          
+          </View>
+
+          
+      </KeyboardAvoidingView>
+
+      </TouchableWithoutFeedback>
+     
     )
   }
 }

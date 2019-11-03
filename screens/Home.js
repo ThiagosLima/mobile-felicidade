@@ -1,11 +1,20 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View} from 'react-native'
 import AsyncStorage from 'AsyncStorage'
+
+
+// Home.navigationOptions = {
+//   headerTitle: 'none'
+// };
 
 
 export default class Home extends React.Component {
 
-  
+  static navigationOptions = {
+    header: null,
+  };
+
+
   constructor() {
     super()
     this.state = {
