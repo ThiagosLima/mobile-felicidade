@@ -1,14 +1,10 @@
 import React from 'react'
 import AppContainer from './navigation/index'
-import {Text, StyleSheet, View} from 'react-native'
+import HeaderLogin from './components/HeaderLogin'
 
 export default function App() {
-  return <AppContainer/>
+  // return <AppContainer/>
+  return <HeaderLogin />
 }
 
-const styles = StyleSheet.create({
-  back: {
-    backgroundColor: 'green'
-  }
-})
 
