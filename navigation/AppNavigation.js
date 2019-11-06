@@ -13,21 +13,7 @@ import HabitsScreen from "../screens/HabitsScreen";
 import InfoScreen from "../screens/InfoScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
-import { createStackNavigator } from 'react-navigation-stack'
-import Home from '../screens/Home'
 
-
-
-// const AppNavigation = createStackNavigator(
-//   {
-//     Home: { screen: Home }
-//   },
-//   {
-//     initialRouteName: 'Home'
-//   }
-// )
-
-// export default AppNavigation
 
 
 const tabScreenConfig = {
@@ -85,21 +71,21 @@ const tabScreenConfig = {
 const mainTabNavigator =
   Platform.OS === "android"
     ? createMaterialBottomTabNavigator(tabScreenConfig, {
-        activeColor: "#807B52",
-        inactiveColor: "#FFF",
-        shifting: true,
-        barStyle: {
+      activeColor: "#807B52",
+      inactiveColor: "#FFF",
+      shifting: true,
+      barStyle: {
+        backgroundColor: "#FCE133"
+      }
+    })
+    : createBottomTabNavigator(tabScreenConfig, {
+      tabBarOptions: {
+        activeTintColor: "#807B52",
+        inactiveTintColor: "#FFF",
+        style: {
           backgroundColor: "#FCE133"
         }
-      })
-    : createBottomTabNavigator(tabScreenConfig, {
-        tabBarOptions: {
-          activeTintColor: "#807B52",
-          inactiveTintColor: "#FFF",
-          style: {
-            backgroundColor: "#FCE133"
-          }
-        }
-      });
+      }
+    });
 
- export default createAppContainer(mainTabNavigator);
+export default createAppContainer(mainTabNavigator);

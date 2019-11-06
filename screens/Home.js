@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View} from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import AsyncStorage from 'AsyncStorage'
 
 
@@ -23,17 +23,17 @@ export default class Home extends React.Component {
     this.getUserToken()
 
   }
-  
+
 
   getUserToken = async () => {
-    try{
-      const token = await AsyncStorage.getItem('storage_Key')
-      
-      this.setState({token})
-    }catch(error){
+    try {
+      const token = await AsyncStorage.getItem('token')
+
+      this.setState({ token })
+    } catch (error) {
       alert(error)
     }
-  
+
   }
 
   render() {
@@ -48,7 +48,7 @@ export default class Home extends React.Component {
 
 
 
-  
+
 }
 
 const styles = StyleSheet.create({

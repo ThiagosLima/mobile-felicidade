@@ -8,7 +8,7 @@ onPress = () => {
   alert('Clicked')
 }
 
-const HeaderLogin = () => {
+const CardLogin = () => {
   return <View style={styles.header}>
     <View style={styles.buttons}>
       <TouchableOpacity onPress={this.onPress}><Text style={{ color: 'white', fontWeight: 'bold' }}>Entrar</Text></TouchableOpacity>
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default HeaderLogin;
+export default CardLogin;

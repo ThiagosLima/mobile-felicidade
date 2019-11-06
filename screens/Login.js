@@ -3,28 +3,24 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Button,
-  TextInput,
-  KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Text,
+  Alert
 } from 'react-native'
 
-//import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorage from 'AsyncStorage'
-
-import Colors from '../constants/Colors'
-
-
 import { LinearGradient } from 'expo-linear-gradient';
 
+import Colors from '../constants/Colors'
+import Addresses from '../constants/Addresses'
+import Input from '../components/Input'
+import Button from '../components/Button'
 
 const axios = require('axios')
 
-
-// LoginScreen.navigationOptions = {
-//   headerTitle: 'none'
-// };
 
 export default class Login extends React.Component {
   state = {
@@ -32,8 +28,6 @@ export default class Login extends React.Component {
     password: '',
     spinner: false
   }
-
-
 
   handleEmailChange = email => {
     this.setState({ email })
@@ -43,102 +37,133 @@ export default class Login extends React.Component {
     this.setState({ password })
   }
 
+  setModal(visible) {
+    this.setState({ spinner: visible });
+  }
+
   onLogin = async () => {
-    const { email, password } = this.state
+    const { email, password, spinner } = this.state
 
 
 
     try {
-      const response = await axios.post('http://192.168.0.103:3000/api/auth', {
+
+      this.setModal(!this.state.spinner);
+
+      const response = await axios.post(`${Addresses.HOST}:${Addresses.PORT}/${Addresses.LOGIN}`, {
         email: email,
         password: password
       })
 
-      await AsyncStorage.setItem('storage_Key', response.data)
+      await AsyncStorage.setItem('token', response.data)
 
       if (response.status == '200') this.props.navigation.navigate('App')
 
 
     } catch (error) {
-      alert(error)
+      this.setModal(!this.state.spinner);
+      Alert.alert('Erro', 'Usuário ou senha inválida.')
     }
 
 
   }
 
   goToSignup = () => this.props.navigation.navigate('Signup')
+
   render() {
     const { email, password } = this.state
 
     return (
-      <LinearGradient
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center', alignContent: 'center' }}
-        colors={[Colors.MIDDLE_SATURATED_ORANGE, Colors.LIGHT_SATURATED_YELLOW]}
-      >
+      <View style={{ flex: 1 }}>
+        <LinearGradient
+          style={{ flex: 1 }}
+          colors={[Colors.MIDDLE_SATURATED_ORANGE, Colors.LIGHT_SATURATED_YELLOW]}
+        >
 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <KeyboardAvoidingView
-            behavior="padding"
-            keyboardVerticalOffset={50}
-            style={styles.container}
-          >
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss} accessible={false}>
+            <KeyboardAvoidingView
+              behavior="padding"
+              keyboardVerticalOffset={5}
+              style={styles.header}
+            >
 
-            <View style={styles.card} >
-              <View style={{ margin: 10 }}>
-                <TextInput
+              {/* <View style={styles.header}> */}
+
+              <View style={styles.buttons}>
+                <TouchableOpacity><Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>Entrar</Text></TouchableOpacity>
+                <TouchableOpacity onPress={this.goToSignup}><Text style={{ color: Colors.GREY, fontSize: 20 }}>Cadastrar</Text></TouchableOpacity>
+
+              </View>
+              <View style={styles.card}>
+                <Input
                   name='email'
+                  icon_name='user-circle'
+                  icon_size={22}
                   value={email}
-                  placeholder='Enter email'
+                  placeholder='Digite o seu email'
                   autoCapitalize='none'
+                  secureTextEntry={false}
                   onChangeText={this.handleEmailChange}
-                  style={styles.inputEmail}
-                // inlineImageLeft='search_icon'
-                // selection={{ start: 3, end: 3 }}
+
+
                 />
-              </View>
-              <View style={{ margin: 10 }}>
-                <TextInput
+                <Input
                   name='password'
+                  icon_name='unlock-alt'
+                  icon_size={25}
                   value={password}
-                  placeholder='Enter password'
-                  secureTextEntry
+                  placeholder='Senha                        '
+                  secureTextEntry={true}
                   onChangeText={this.handlePasswordChange}
+                  style={{ paddinStart: 15 }}
                 />
+                {this.state.spinner &&
+                  <Text>Processando ...</Text>
+                }
+                <Button onPress={this.onLogin} title={'Entrar'} />
               </View>
-              <Button title='Login' onPress={this.onLogin} />
-              <Button title='Go to Signup' onPress={this.goToSignup} />
-
-            </View>
 
 
-          </KeyboardAvoidingView>
 
-        </TouchableWithoutFeedback>
-      </LinearGradient>
+              {/* </View> */}
+            </KeyboardAvoidingView>
 
+          </TouchableWithoutFeedback>
+        </LinearGradient>
+
+
+      </View>
 
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  header: {
     flex: 1,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
+    height: '50%'
   },
-  inputEmail: {
-
-    height: 45,
-    width: 245,
-    borderColor: Colors.MIDDLE_SATURATED_ORANGE,
-    borderWidth: 2,
-    borderRadius: 50,
-    elevation: 1
-  },
-
   card: {
-    backgroundColor: 'white'
+
+    width: '80%',
+    height: '40%',
+    minHeight: '40%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 20,
+    paddingTop: 40
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%',
+    paddingBottom: 20,
+    paddingLeft: 10,
+    paddingRight: 8
   }
 })
