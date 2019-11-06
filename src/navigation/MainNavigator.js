@@ -1,6 +1,7 @@
 import React from "react";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,6 +10,7 @@ import CalendarScreen from "../screens/calendarScreen";
 import HabitsScreen from "../screens/habitsScreen";
 import InfoScreen from "../screens/infoScreen";
 import SettingsScreen from "../screens/settingsScreen";
+import EventDetailScreen from "../screens/eventDetail";
 
 const tabScreenConfig = {
   Home: {
@@ -82,4 +84,17 @@ const mainTabNavigator =
         }
       });
 
-export default createAppContainer(mainTabNavigator);
+const mainStackNavigator = createStackNavigator(
+  {
+    Tabs: mainTabNavigator,
+    EventDetail: EventDetailScreen
+  },
+  {
+    initialRouteName: "Tabs",
+    defaultNavigationOptions: {
+      title: "Felicidade"
+    }
+  }
+);
+
+export default createAppContainer(mainStackNavigator);
