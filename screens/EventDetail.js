@@ -7,7 +7,7 @@ import {
   View
 } from "react-native";
 import DatePicker from "react-native-datepicker";
-import apiFelicidade from "../api/apiFelicidade";
+const axios = require('axios')
 
 const EventDetailScreen = ({ navigation }) => {
   const { _id, ...oldEvent } = navigation.getParam("event");
@@ -20,6 +20,17 @@ const EventDetailScreen = ({ navigation }) => {
   };
 
   const [event, setEvent] = useState(_id ? oldEvent : newEvent);
+
+  getUserToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      return token._id
+    } catch (error) {
+      alert(error)
+    }
+
+
+  }
 
   return (
     <View style={styles.background}>
@@ -90,12 +101,14 @@ const EventDetailScreen = ({ navigation }) => {
             console.log("salvar");
             try {
               console.log(event);
-              let url = "/users/5dc0a7a7d2fe650014eb0818";
+              let url = await axios.get(`${Addresses.HOST}:${Addresses.PORT}/users/${this.getUserToken()}`);
               url = _id ? `${url}?eventId=${_id}` : url;
 
               console.log(url);
 
-              await apiFelicidade.put(url, {
+
+
+              await axios.put(url, {
                 name: "User03",
                 event: {
                   ...event

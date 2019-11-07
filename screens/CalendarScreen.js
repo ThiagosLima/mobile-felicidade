@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
-import apiFelicidade from "../api/apiFelicidade";
 import ActionButton from "react-native-action-button";
 import moment from "moment";
+import Addresses from '../constants/Addresses'
+const axios = require('axios')
 
 export default class AgendaScreen extends Component {
   constructor(props) {
@@ -76,8 +77,20 @@ export default class AgendaScreen extends Component {
     this.setState({ items: newItems });
   };
 
+  getUserToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token')
+      return token._id
+    } catch (error) {
+      alert(error)
+    }
+
+
+  }
+
   getApiData = async () => {
-    const { data } = await apiFelicidade.get("/users/5dc0a7a7d2fe650014eb0818");
+    // req.user._id
+    const { data } = await axios.get(`${Addresses.HOST}:${Addresses.PORT}/users/${this.getUserToken}`);
 
     const events = data.events;
     const items = this.formatItems(events);

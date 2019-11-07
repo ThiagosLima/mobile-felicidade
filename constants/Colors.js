@@ -1,0 +1,6 @@
+export default {
+
+  MIDDLE_SATURATED_ORANGE: '#FFB700',
+  LIGHT_SATURATED_YELLOW: '#FFE600',
+  GREY: '#808080'
+};
