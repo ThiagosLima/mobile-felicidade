@@ -14,18 +14,19 @@ import HabitsScreen from "../screens/HabitsScreen";
 import InfoScreen from "../screens/InfoScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import EventDetailScreen from '../screens/EventDetail'
-
+// import FeedSavedScreen from '../screens/FeedSavedScreen'
+import FeedSavedScreen from './FeedNavigation'
 
 
 
 const tabScreenConfig = {
   Home: {
-    screen: HomeScreen,
+    screen: FeedSavedScreen,
     navigationOptions: {
       tabBarLabel: "Início",
       tabBarIcon: tabInfo => (
         <Ionicons name="md-home" size={25} color={tabInfo.tintColor} />
-      )
+      ),
     }
   },
   Calendar: {
