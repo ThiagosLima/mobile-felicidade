@@ -21,10 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/Colors'
 import Addresses from '../constants/Addresses'
 
-import {
-  FontAwesome, MaterialCommunityIcons,
-  MaterialIcons
-} from '@expo/vector-icons'
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 
 const axios = require('axios')
 
@@ -131,70 +128,90 @@ export default class AddScreen extends React.Component {
 
 
       <View style={styles.container}>
-        <View>
-          <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <FontAwesome
-              name='user-o'
-              style={{ paddingRight: 10 }}
-              size={40} />
 
-            <View style={{
-              flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'grey', backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-              borderRadius: 25, padding: 10,
-            }}>
-              <Text>Anderson</Text>
-              <MaterialCommunityIcons
-                name='square-edit-outline'
-                style={{}}
-                size={10} />
-            </View>
-
-          </TouchableOpacity>
-        </View>
-
+        <TouchableOpacity style={styles.containerAuthor}>
+          <Text>Anderson</Text>
+        </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', padding: 15 }}>
-          <MaterialIcons
-            name='title'
-            style={{ paddingRight: 5 }}
+          <FontAwesome
+            name='user-o'
+            style={{ paddingRight: 25 }}
             size={40}
           />
           <TouchableOpacity
-            style={styles.containerTitle}>
+            style={{ backgroundColor: Colors.LIGHT_SHADE_YELLOW, borderRadius: 25, justifyContent: 'center', flexDirection: 'row', alignItems: 'center', padding: 10 }}>
 
             <Text >Sem Título</Text>
             <MaterialCommunityIcons
               name='square-edit-outline'
               style={{}}
               size={10} />
-          </TouchableOpacity>
-
-
-
-        </View>
-
-        <View style={{ flexDirection: 'row', padding: 15 }}>
-          <FontAwesome
-            name='file-text-o'
-            style={{ paddingRight: 5 }}
-            size={40}
-          />
-          <TouchableOpacity
-            style={styles.containerText}>
-
-            <Text >Texto</Text>
-            <MaterialCommunityIcons
-              name='square-edit-outline'
-              style={{}}
-              size={10} />
 
 
           </TouchableOpacity>
 
-
-
         </View>
 
+
+
+        <View style={{ ...styles.inputView, height: 45, width: '80%' }}>
+
+          <Text>{this.state.title}</Text>
+          {/* <TextInput
+            name='title'
+            value={title}
+            placeholder='Título                             '
+            autoCapitalize='none'
+            secureTextEntry={false}
+            onChangeText={this.handleTitleChange}
+            autoCorrect={true}
+
+          >
+          </TextInput> */}
+        </View>
+
+        <View style={{ ...styles.inputView, height: '30%', minHeight: '25%', width: '80%', borderRadius: 5 }}>
+
+
+          <TouchableOpacity style={{ flex: 1 }} onPress={this.onClickTitle}>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+            >
+              <View style={styles.containerModal}>
+                <View style={{ ...styles.inputView, height: '30%', minHeight: '25%', width: '80%', borderRadius: 5 }}>
+                  <TextInput
+                    name='Text'
+                    value={this.state.text}
+                    placeholder='Descrição'
+                    autoCapitalize='none'
+                    secureTextEntry={false}
+                    onChangeText={this.handleTextChange}
+                    autoCorrect={true}
+                    multiline={true}
+                    scrollEnabled={true}
+                  // numberOfLines={10}
+
+                  >
+                  </TextInput>
+                </View>
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.buttons} onPress={this.onClickSalvar && this.onClickTitle}>
+                    <Text style={styles.buttonsColor}>Salvar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttons} onPress={this.onClickTitle}>
+                    <Text style={styles.buttonsColor}>Cancelar</Text>
+                  </TouchableOpacity>
+                </View>
+
+              </View>
+            </Modal>
+            <Text>{this.state.text}</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.buttons} onPress={this.onClickSalvar}>
@@ -228,39 +245,20 @@ export default class AddScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    // alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'column',
     flex: 1,
+    // borderWidth: 2,
+    // borderColor: 'black',
     margin: 15,
     borderRadius: 5,
     elevation: 5,
     padding: 10
   },
   containerAuthor: {
-
-    alignItems: 'flex-end',
-    backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-    borderRadius: 25,
-    flexDirection: 'row',
-    padding: 10
-  },
-  containerTitle: {
-    backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-    borderRadius: 25,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    flex: 1
-  },
-  containerText: {
-    backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-    borderRadius: 25,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    flex: 1
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end'
   },
   containerModal: {
     backgroundColor: 'white',
