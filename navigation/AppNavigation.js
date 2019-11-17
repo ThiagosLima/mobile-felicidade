@@ -1,22 +1,20 @@
-//AppNavigation.js
-
+// Components
 import React from "react";
 import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createStackNavigator } from "react-navigation-stack";
+// Icons
 import { Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { createStackNavigator } from "react-navigation-stack";
-
-import HomeScreen from "../screens/Home"
+// Screens
+import HomeScreen from "../screens/Home";
 import CalendarScreen from "../screens/CalendarScreen";
 import HabitsScreen from "../screens/HabitsScreen";
 import InfoScreen from "../screens/InfoScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import EventDetailScreen from '../screens/EventDetail'
-
-
-
+import EventDetailScreen from "../screens/EventDetail";
+import HabitDetailScreen from "../screens/HabitDetailScreen";
 
 const tabScreenConfig = {
   Home: {
@@ -70,31 +68,31 @@ const tabScreenConfig = {
   }
 };
 
-
 const mainTabNavigator =
   Platform.OS === "android"
     ? createMaterialBottomTabNavigator(tabScreenConfig, {
-      activeColor: "#807B52",
-      inactiveColor: "#FFF",
-      shifting: true,
-      barStyle: {
-        backgroundColor: "#FCE133"
-      }
-    })
-    : createBottomTabNavigator(tabScreenConfig, {
-      tabBarOptions: {
-        activeTintColor: "#807B52",
-        inactiveTintColor: "#FFF",
-        style: {
+        activeColor: "#807B52",
+        inactiveColor: "#FFF",
+        shifting: true,
+        barStyle: {
           backgroundColor: "#FCE133"
         }
-      }
-    });
+      })
+    : createBottomTabNavigator(tabScreenConfig, {
+        tabBarOptions: {
+          activeTintColor: "#807B52",
+          inactiveTintColor: "#FFF",
+          style: {
+            backgroundColor: "#FCE133"
+          }
+        }
+      });
 
 const mainStackNavigator = createStackNavigator(
   {
     Tabs: mainTabNavigator,
-    EventDetail: EventDetailScreen
+    EventDetail: EventDetailScreen,
+    HabitDetail: HabitDetailScreen
   },
   {
     initialRouteName: "Tabs",
@@ -104,6 +102,4 @@ const mainStackNavigator = createStackNavigator(
   }
 );
 
-
 export default createAppContainer(mainStackNavigator);
-
