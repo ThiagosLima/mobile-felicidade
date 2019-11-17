@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { FlatList } from "react-native";
+import { ListItem } from "react-native-elements";
 import felicidadeApi from "../api/felicidadeApi";
 
 class HabitsScreen extends Component {
@@ -37,47 +32,30 @@ class HabitsScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <FlatList
-          keyExtractor={category => category}
-          data={this.state.categories}
-          renderItem={({ item: category }) => {
-            return (
-              <TouchableOpacity
-                style={styles.line}
-                onPress={() => {
-                  this.props.navigation.navigate("HabitDetail", {
-                    category: category,
-                    habits: this.filterHabits(category, this.state.habits)
-                  });
-                }}>
-                <Text style={styles.item}>{category}</Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      </View>
+      <FlatList
+        keyExtractor={category => category}
+        data={this.state.categories}
+        renderItem={({ item: category }) => {
+          return (
+            <ListItem
+              title={category}
+              bottomDivider
+              chevron
+              titleStyle={{
+                color: "#EEAB00"
+              }}
+              onPress={() => {
+                this.props.navigation.navigate("HabitDetail", {
+                  category,
+                  habits: this.filterHabits(category, this.state.habits)
+                });
+              }}
+            />
+          );
+        }}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  item: {
-    color: "#EEAB00",
-    fontSize: 16,
-    padding: 10,
-    paddingStart: 20
-  },
-  line: {
-    borderColor: "#EEAB00",
-    borderBottomWidth: 1,
-    borderTopWidth: 1
-  },
-  container: {
-    borderColor: "#EEAB00",
-    borderBottomWidth: 3,
-    borderTopWidth: 3
-  }
-});
 
 export default HabitsScreen;
