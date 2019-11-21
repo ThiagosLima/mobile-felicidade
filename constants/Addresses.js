@@ -1,9 +1,10 @@
-export default {
+import { processColor } from "react-native";
 
-  HOST: 'http://192.168.0.103',
-  PORT: '3000',
-  LOGIN: 'api/auth',
-  SIGNUP: 'api/users',
-  ME: '/users/me',
-  BASE_URL: `http://192.168.0.103:3000/api`,
+export default {
+  HOST: process.env.HOST,
+  PORT: process.env.PORT,
+  LOGIN: process.env.LOGIN,
+  SIGNUP: process.env.SIGNUP,
+  ME: process.env.ME,
+  BASE_URL: process.env.BASE_URL
 };

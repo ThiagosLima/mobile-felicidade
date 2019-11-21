@@ -13,6 +13,7 @@
     "expo": "^35.0.0",
     "expo-font": "~7.0.0",
     "expo-linear-gradient": "~7.0.0",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "react": "16.8.3",
