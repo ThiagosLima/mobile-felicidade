@@ -11,10 +11,12 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
   ScrollView,
-  Modal
+  Modal,
+  Picker,
+
 
 } from 'react-native'
-import { Container, Header, Content, Picker, Form } from "native-base";
+// import { Container, Header, Content, Picker, Form } from "native-base";
 import AsyncStorage from 'AsyncStorage'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,8 +24,10 @@ import Colors from '../constants/Colors'
 import Addresses from '../constants/Addresses'
 
 import {
-  FontAwesome, MaterialCommunityIcons,
-  MaterialIcons
+  FontAwesome,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Entypo
 } from '@expo/vector-icons'
 
 const axios = require('axios')
@@ -63,8 +67,10 @@ export default class AddScreen extends React.Component {
 
   getUserToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('token')
-      this.setState({ token })
+      // const token = await AsyncStorage.getItem('token')
+      // this.setState({ token })
+
+      this.setState({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGQ1ODk4NWI2MjNhMzAwMjE2ZDk0YmYiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTc0Mjc1NDYxfQ.AIcyyE-xLyW778H9Z-ZtTp3gv4fP0sITrMhk1amPgwc' })
 
       const response = await axios.request({
         url: Addresses.ME,
@@ -73,7 +79,7 @@ export default class AddScreen extends React.Component {
         headers: {
           // 'x-auth-token': this.state.token,
           // 'content-type': 'application/json'
-          'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGM0MjdmMGZmZjkzYTAwMTJlNDk2MjQiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTczODI4OTQwfQ.lKGFkJPXTusuYqfpM6aRtw2KVaNAKM9fUTwjjJ-QMME',
+          'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZGQ1ODk4NWI2MjNhMzAwMjE2ZDk0YmYiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNTc0Mjc1NDYxfQ.AIcyyE-xLyW778H9Z-ZtTp3gv4fP0sITrMhk1amPgwc',
           'content-type': 'application/json'
 
 
@@ -81,7 +87,7 @@ export default class AddScreen extends React.Component {
       })
       this.setState({ name, _id } = response.data)
 
-      console.log(response.data)
+
     } catch (error) {
 
       console.log(error)
@@ -125,99 +131,86 @@ export default class AddScreen extends React.Component {
 
     return (
 
-      // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={5}
+        style={styles.header}
+      >
 
-      // <View >
+        <View style={styles.container}>
+          <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
 
+              <View style={styles.containerUser}>
+                {/* <FontAwesome
+                name='user-o'
+                style={{ paddingRight: 5, justifyContent: 'center' }}
+                size={15} /> */}
 
-      <View style={styles.container}>
-        <View>
-          <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <FontAwesome
-              name='user-o'
-              style={{ paddingRight: 10 }}
-              size={40} />
+                <Picker
+                  selectedValue={this.state.itemSelected}
+                  style={{ height: 20, width: 150 }}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({ itemSelected: itemValue })
+                  }>
+                  <Picker.Item label={this.state.name} value={this.state._id} />
+                  <Picker.Item label="Anônimo" value='0' />
+                </Picker>
+              </View>
 
-            <View style={{
-              flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', backgroundColor: 'grey', backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-              borderRadius: 25, padding: 10,
-            }}>
-              <Text>Anderson</Text>
-              <MaterialCommunityIcons
-                name='square-edit-outline'
-                style={{}}
-                size={10} />
             </View>
-
-          </TouchableOpacity>
-        </View>
+          </View>
 
 
-        <View style={{ flexDirection: 'row', padding: 15 }}>
-          <MaterialIcons
-            name='title'
-            style={{ paddingRight: 5 }}
-            size={40}
-          />
-          <TouchableOpacity
-            style={styles.containerTitle}>
+          <View style={{ flexDirection: 'row', paddingTop: 15 }}>
 
-            <Text >Sem Título</Text>
-            <MaterialCommunityIcons
-              name='square-edit-outline'
-              style={{}}
-              size={10} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.containerTitle}
+              onPress={() => {
+                this.setModalVisible(!this.state.modalVisible);
+              }}
+            >
 
+              <Text >Sem Título</Text>
 
+            </TouchableOpacity>
 
-        </View>
+          </View>
 
-        <View style={{ flexDirection: 'row', padding: 15 }}>
-          <FontAwesome
-            name='file-text-o'
-            style={{ paddingRight: 5 }}
-            size={40}
-          />
-          <TouchableOpacity
-            style={styles.containerText}>
+          <View style={{ flexDirection: 'row', paddingTop: 15 }}>
 
-            <Text >Texto</Text>
-            <MaterialCommunityIcons
-              name='square-edit-outline'
-              style={{}}
-              size={10} />
+            <TouchableOpacity
+              style={styles.containerText}>
 
+              <TextInput
+                name='title'
+                value={this.state.text}
+                placeholder='Digite a descrição'
+                onChangeText={this.handleTextChange}
+                multiline={true}
+                style={{ maxHeight: 45 }}
+              // numberOfLines={5}
+              // scrollEnabled={true}
+              />
 
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: 'row', paddingTop: 15 }}>
+            <TouchableOpacity style={styles.buttons} onPress={this.onClickSalvar}>
+              <Text style={styles.buttonsColor}>Salvar</Text>
+            </TouchableOpacity>
 
+          </View>
 
+          <View style={{ flexDirection: 'row', paddingTop: 15 }}>
+            <TouchableOpacity style={styles.buttons}>
+              <Text style={styles.buttonsColor}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
 
-        </View>
+        </View >
 
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.buttons} onPress={this.onClickSalvar}>
-            <Text style={styles.buttonsColor}>Salvar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttons}>
-            <Text style={styles.buttonsColor}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
-        {/* </LinearGradient> */}
-
-
-
-      </View >
-
-
-
-
-
-
-
-
-
+      </KeyboardAvoidingView>
 
 
     )
@@ -228,13 +221,22 @@ export default class AddScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     flexDirection: 'column',
-    flex: 1,
     margin: 15,
     borderRadius: 5,
     elevation: 5,
     padding: 10
+  },
+  containerUser: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'grey',
+    backgroundColor: Colors.LIGHT_SHADE_YELLOW,
+    borderRadius: 25,
+    padding: 10,
+    flex: 1
   },
   containerAuthor: {
 
@@ -286,26 +288,23 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: 5,
+    flex: 1
   },
   buttons: {
-    height: 45,
-    width: '40%',
-    backgroundColor: Colors.LIGHT_SHADE_YELLOW,
-    borderRadius: 50,
-    elevation: 1,
-    alignItems: 'center',
+    backgroundColor: Colors.BROWN,
+    borderRadius: 25,
     justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    flex: 1
 
   },
   buttonsColor: {
-    color: Colors.BROWN
-  },
-  scrow: {
-    flex: 1,
-
+    color: Colors.LIGHT_SHADE_YELLOW
   }
 })

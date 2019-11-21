@@ -18,7 +18,7 @@ const RouteConfigs = {
 }
 
 const TabNavigatorConfig = {
-  initialRouteName: "Add",
+  initialRouteName: "Feed",
   tabBarOptions: {
     activeTintColor: Colors.BROWN,
     style: {
