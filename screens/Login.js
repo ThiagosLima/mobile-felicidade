@@ -45,7 +45,8 @@ export default class Login extends React.Component {
 
     try {
       this.setModal(!this.state.spinner);
-
+      const test = `${Addresses.HOST}:${Addresses.PORT}/${Addresses.LOGIN}`;
+      console.log(test);
       const response = await axios.post(
         `${Addresses.HOST}:${Addresses.PORT}/${Addresses.LOGIN}`,
         {
