@@ -3,13 +3,16 @@ import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Agenda, LocaleConfig } from "react-native-calendars";
 import ActionButton from "react-native-action-button";
 import moment from "moment";
-import Addresses from '../constants/Addresses'
-const axios = require('axios')
+import { getUserId } from "../utils/users";
+import brLocale from "../utils/configLocale";
+import felicidadeApi from "../api/felicidadeApi";
+import { NavigationEvents } from "react-navigation";
 
 export default class AgendaScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      agendaId: "",
       items: {}
     };
   }
@@ -18,19 +21,12 @@ export default class AgendaScreen extends Component {
     await this.getApiData();
   }
 
-  formatItems = items => {
-    const formatedItems = {};
-    items.map(item => {
-      const key = item.initialDate.split("T")[0];
-      if (key in formatedItems) formatedItems[key].push(item);
-      else formatedItems[key] = [item];
-    });
-    return formatedItems;
-  };
-
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <NavigationEvents
+          onWillFocus={async payload => await this.getApiData()}
+        />
         <Agenda
           items={this.state.items}
           loadItemsForMonth={this.loadItems}
@@ -51,13 +47,31 @@ export default class AgendaScreen extends Component {
           buttonColor="#808080"
           onPress={() =>
             this.props.navigation.navigate("EventDetail", {
-              event: { _id: "" }
+              event: { _id: "", agendaId: this.state.agendaId }
             })
           }
         />
       </View>
     );
   }
+
+  getApiData = async () => {
+    const userId = await getUserId();
+    const { data } = await felicidadeApi.get(`/agenda?user=${userId}`);
+    const { _id: agendaId, events } = data[0];
+    const items = this.formatItems(events);
+    this.setState({ agendaId, items });
+  };
+
+  formatItems = items => {
+    const formatedItems = {};
+    items.map(item => {
+      const key = item.initialDate.split("T")[0];
+      if (key in formatedItems) formatedItems[key].push(item);
+      else formatedItems[key] = [item];
+    });
+    return formatedItems;
+  };
 
   loadItems = async day => {
     // Load empty days
@@ -77,26 +91,6 @@ export default class AgendaScreen extends Component {
     this.setState({ items: newItems });
   };
 
-  getUserToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token')
-      return token._id
-    } catch (error) {
-      alert(error)
-    }
-
-
-  }
-
-  getApiData = async () => {
-    // req.user._id
-    const { data } = await axios.get(`${Addresses.HOST}:${Addresses.PORT}/users/${this.getUserToken}`);
-
-    const events = data.events;
-    const items = this.formatItems(events);
-    this.setState({ items });
-  };
-
   formatDate = date => {
     const formated = moment(date).format("DD/MM/YYYY HH:mm");
     return formated;
@@ -110,7 +104,12 @@ export default class AgendaScreen extends Component {
       <TouchableOpacity
         onPress={() =>
           this.props.navigation.navigate("EventDetail", {
-            event: { ...item, initialDate, finalDate }
+            event: {
+              ...item,
+              initialDate,
+              finalDate,
+              agendaId: this.state.agendaId
+            }
           })
         }>
         <View style={[styles.item, { height: item.height }]}>
@@ -170,45 +169,5 @@ const styles = StyleSheet.create({
   }
 });
 
-LocaleConfig.locales["br"] = {
-  monthNames: [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Mai0",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outrubro",
-    "Novembro",
-    "Dezembro"
-  ],
-  monthNamesShort: [
-    "Jan.",
-    "Fev.",
-    "Mar",
-    "Abr.",
-    "Mai.",
-    "Jun.",
-    "Jul.",
-    "Ago.",
-    "Set.",
-    "Out.",
-    "Nov.",
-    "Dez."
-  ],
-  dayNames: [
-    "Domingo",
-    "Segunda",
-    "Terça",
-    "Quarta",
-    "Quinta",
-    "Sexta",
-    "Sábado"
-  ],
-  dayNamesShort: ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."],
-  today: "Hoje"
-};
+LocaleConfig.locales["br"] = brLocale;
 LocaleConfig.defaultLocale = "br";

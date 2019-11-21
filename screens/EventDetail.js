@@ -7,42 +7,34 @@ import {
   View
 } from "react-native";
 import DatePicker from "react-native-datepicker";
-const axios = require('axios')
+import felicidadeApi from "../api/felicidadeApi";
+import { getUserId } from "../utils/users";
 
 const EventDetailScreen = ({ navigation }) => {
-  const { _id, ...oldEvent } = navigation.getParam("event");
+  const { _id, agendaId, ...oldEvent } = navigation.getParam("event");
+  console.log(agendaId);
 
   const newEvent = {
-    title: "",
-    content: "",
+    ...oldEvent,
     initialDate: new Date(),
     finalDate: new Date()
   };
 
   const [event, setEvent] = useState(_id ? oldEvent : newEvent);
-
-  getUserToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token')
-      return token._id
-    } catch (error) {
-      alert(error)
-    }
-
-
-  }
-
+  // console.log(event);
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <TextInput
           placeholder="Atividade"
+          multiline
           style={styles.input}
           value={event.title}
           onChangeText={newTitle => setEvent({ ...event, title: newTitle })}
         />
         <TextInput
           placeholder="Descrição"
+          multiline
           style={styles.input}
           value={event.content}
           onChangeText={newContent =>
@@ -98,27 +90,24 @@ const EventDetailScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={async () => {
-            console.log("salvar");
             try {
-              console.log(event);
-              let url = await axios.get(`${Addresses.HOST}:${Addresses.PORT}/users/${this.getUserToken()}`);
+              // Get agendaId if not defined
+              const userId = await getUserId();
+              const { data } = await felicidadeApi.get(
+                `/agenda?user=${userId}`
+              );
+              const { _id: agendaId } = data[0];
+
+              // Define url
+              let url = `/agenda/${agendaId}`;
               url = _id ? `${url}?eventId=${_id}` : url;
 
-              console.log(url);
-
-
-
-              await axios.put(url, {
-                name: "User03",
-                event: {
-                  ...event
-                }
-              });
-
-              console.log("fim salvar");
+              const body = { event };
+              await felicidadeApi.put(url, body);
             } catch (error) {
               console.log(error);
             }
+            navigation.goBack();
           }}>
           <Text style={styles.buttonText}>Salvar</Text>
         </TouchableOpacity>
@@ -140,7 +129,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     backgroundColor: "#EEAB00",
-    borderRadius: 15,
+    borderRadius: 25,
     margin: 10,
     paddingStart: 20,
     alignItems: "stretch"
@@ -151,12 +140,13 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: "#EEAB00",
-    borderRadius: 50,
+    borderRadius: 25,
     borderWidth: 2,
     color: "#EEAB00",
-    height: 45,
-    padding: 5,
-    paddingStart: 20,
+    maxHeight: 90,
+    padding: 10,
+    paddingStart: 30,
+    paddingEnd: 30,
     margin: 10
   },
   date: {

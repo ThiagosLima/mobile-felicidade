@@ -1,40 +1,32 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import AsyncStorage from 'AsyncStorage'
-
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import AsyncStorage from "AsyncStorage";
 
 // Home.navigationOptions = {
 //   headerTitle: 'none'
 // };
 
-
 export default class Home extends React.Component {
-
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
-
   constructor() {
-    super()
+    super();
     this.state = {
-      token: ''
-    }
-    this.getUserToken()
-
+      token: ""
+    };
+    this.getUserToken();
   }
-
 
   getUserToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('token')
-
-      this.setState({ token })
+      const token = await AsyncStorage.getItem("token");
+      this.setState({ token });
     } catch (error) {
-      alert(error)
+      alert(error);
     }
-
-  }
+  };
 
   render() {
     return (
@@ -43,19 +35,15 @@ export default class Home extends React.Component {
         <Text>{this.state.token}</Text>
         <Text>Another text</Text>
       </View>
-    )
+    );
   }
-
-
-
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   }
-})
+});
