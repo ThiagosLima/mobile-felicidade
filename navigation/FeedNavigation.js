@@ -1,9 +1,8 @@
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import HomeScreen from '../screens/Home'
-import FeedSavedScreen from '../screens/FeedSavedScreen'
-import AddScreen from '../screens/AddScreen'
-import Colors from '../constants/Colors'
-
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import HomeScreen from "../screens/Home";
+import FeedSavedScreen from "../screens/FeedSavedScreen";
+import AddScreen from "../screens/AddScreen";
+import Colors from "../constants/Colors";
 
 const RouteConfigs = {
   Feed: {
@@ -11,11 +10,11 @@ const RouteConfigs = {
   },
   Add: {
     screen: AddScreen
-  },
-  Salvos: {
-    screen: FeedSavedScreen
   }
-}
+  // Salvos: {
+  //   screen: FeedSavedScreen
+  // }
+};
 
 const TabNavigatorConfig = {
   initialRouteName: "Feed",
@@ -28,6 +27,6 @@ const TabNavigatorConfig = {
       backgroundColor: Colors.BROWN
     }
   }
-}
+};
 
 export default createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig);
