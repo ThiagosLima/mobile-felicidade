@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Modal,
+  Button,
   Picker
 } from "react-native";
 // import { Container, Header, Content, Picker, Form } from "native-base";
@@ -96,11 +97,15 @@ export default class AddScreen extends React.Component {
           isAnon: this.state.itemSelected == "0"
         }
       });
+      this.setModalVisible(!this.state.modalVisible);
+      this.setState({
+        text: "",
+        title: ""
+      });
     } catch (error) {
+      Alert.alert("Não foi possível efetuar o seu post.");
       console.log(error.message);
     }
-
-    this.setModalVisible(!this.state.modalVisible);
   };
 
   setModalVisible(visible) {
@@ -182,30 +187,49 @@ export default class AddScreen extends React.Component {
               <Text style={styles.buttonsColor}>Salvar</Text>
             </TouchableOpacity>
           </View>
-          <View style={{}}>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={this.state.modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
+            // style={{
+            //   backgroundColor: "blue",
+            //   flexDirection: "column",
+            //   justifyContent: "center",
+            //   alignItems: "center",
+            //   padding: 30
+            // }}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: Colors.LIGHT_SATURATED_YELLOW,
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: 30
               }}
             >
-              <View style={{ marginTop: 22 }}>
-                <View>
-                  <Text>Hello World!</Text>
+              <Text>
+                A sua publicação foi enviada!
+                {"\n"}
+                Espere a autorização para a publição aparecer para os outros
+                usuários.
+              </Text>
 
-                  <TouchableHighlight
-                    onPress={() => {
-                      this.setModalVisible(!this.state.modalVisible);
-                    }}
-                  >
-                    <Text>Hide Modal</Text>
-                  </TouchableHighlight>
-                </View>
+              <View style={{ paddingTop: 30 }}>
+                <Button
+                  color={Colors.BROWN}
+                  title="OK"
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}
+                />
               </View>
-            </Modal>
-          </View>
+            </View>
+          </Modal>
 
           <View style={{ flexDirection: "row", paddingTop: 15 }}>
             <TouchableOpacity style={styles.buttons}>
